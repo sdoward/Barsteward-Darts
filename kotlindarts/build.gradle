@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+
+  compileSdkVersion rootProject.ext.androidCompileVersion
+  buildToolsVersion rootProject.ext.androidBuildToolsVersion
+
+  defaultConfig {
+
+    applicationId "com.sdoward.barstewarddarts.android.kotlin"
+    minSdkVersion rootProject.ext.androidMinSdk
+    targetSdkVersion rootProject.ext.androidTargetSdk
+    versionCode 1
+    versionName "1.0"
+
+  }
+
+  buildTypes {
+
+    release {
+
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+    }
+
+  }
+
+  sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
+  }
+
+}
+
+dependencies {
+
+  def libs = rootProject.ext.libs
+  def testLibs = rootProject.ext.testLibs
+
+  compile libs.constraintLayout
+  compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+  compile project(':resources')
+
+  testCompile testLibs.junit
+  testCompile testLibs.assertJ
+
+}
+
+repositories {
+  mavenCentral()
+}

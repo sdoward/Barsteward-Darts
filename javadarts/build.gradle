@@ -1,0 +1,51 @@
+apply plugin: 'com.android.application'
+
+android {
+
+    compileSdkVersion rootProject.ext.androidCompileVersion
+    buildToolsVersion rootProject.ext.androidBuildToolsVersion
+
+    defaultConfig {
+
+        applicationId "com.sdoward.barstewarddarts.android.java"
+        minSdkVersion rootProject.ext.androidMinSdk
+        targetSdkVersion rootProject.ext.androidTargetSdk
+        versionCode 1
+        versionName "1.0"
+
+    }
+
+    buildTypes {
+
+        release {
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+}
+
+dependencies {
+
+    def libs = rootProject.ext.libs
+    def testLibs = rootProject.ext.testLibs
+
+    compile project(':resources')
+    compile libs.androidAppCompat
+    compile libs.constraintLayout
+    compile libs.autoValue
+
+    annotationProcessor libs.autoValue
+
+    testCompile testLibs.junit
+    testCompile testLibs.assertJ
+    testCompile testLibs.mockito
+
+}

@@ -1,0 +1,29 @@
+allprojects {
+    repositories {
+        mavenLocal()
+    }
+}
+
+ext {
+    androidBuildToolsVersion = '25.0.2'
+    androidCompileVersion = 25
+    androidMinSdk = 23
+    androidTargetSdk = 25
+
+    androidSupportVersion = '25.3.1'
+    constrainLayoutVersion = '1.0.2'
+    autoValueVersion = '1.2'
+
+    libs = [
+            androidSupport  : "com.android.support:support-v4:$androidSupportVersion",
+            androidAppCompat: "com.android.support:appcompat-v7:$androidSupportVersion",
+            constraintLayout: "com.android.support.constraint:constraint-layout:$constrainLayoutVersion",
+            autoValue       : "com.google.auto.value:auto-value:$autoValueVersion"
+    ]
+
+    testLibs = [
+            junit  : "junit:junit:4.12",
+            assertJ: 'org.assertj:assertj-core:1.7.1',
+            mockito: 'org.mockito:mockito-core:2.7.22'
+    ]
+}
