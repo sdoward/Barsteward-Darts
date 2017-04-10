@@ -46,6 +46,7 @@ dependencies {
 
   testCompile testLibs.junit
   testCompile testLibs.assertJ
+  testCompile testLibs.mockito
 
 }
 

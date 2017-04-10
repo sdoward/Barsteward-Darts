@@ -1,7 +1,5 @@
 package com.sdoward.barstewarddarts.android.java;
 
-import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 
 @AutoValue
