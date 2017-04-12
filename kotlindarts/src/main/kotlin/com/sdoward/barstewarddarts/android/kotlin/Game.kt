@@ -23,14 +23,9 @@ class Game(val players: List<Player>, private val gameInstructions: GameInstruct
         turns.add(turn)
         displayDrinkingInstructions(turn)
         displayCurrentPlayer()
-        if (players.any { it.lives < 1 }) {
+        if (players.any { it.lives < 1 })
             gameInstructions.displayWinner(players[pointer].name)
-        }
-        if (pointer == players.size - 1) {
-            pointer = 0
-        } else {
-            pointer.inc()
-        }
+        pointer = if (pointer == players.size - 1) 0 else pointer.inc()
     }
 
     private fun displayCurrentPlayer() {
@@ -38,14 +33,10 @@ class Game(val players: List<Player>, private val gameInstructions: GameInstruct
     }
 
     private fun reconsileLives(thro: Throw) {
-        for (i in players.indices) {
-            val player = players[i]
+        for ((i, player) in players.withIndex()) {
             if (numberHit(thro, player)) {
-                if (i == pointer) {
-                    player.lives = player.lives - thro.lifeValue
-                } else {
-                    player.lives = player.lives + thro.lifeValue
-                }
+                val amount = if (i == pointer) -thro.lifeValue else thro.lifeValue
+                player.lives = player.lives.plus(amount)
             }
         }
     }
@@ -55,20 +46,12 @@ class Game(val players: List<Player>, private val gameInstructions: GameInstruct
             val drinkAmount = turn
                     .toList()
                     .filter { numberHit(it, player) }
-                    .fold(0) { total, thro -> total.plus(getDrinkAmount(thro, player)) }
+                    .fold(0) { total, thro -> total.plus(thro.lifeValue) }
             Pair(player, drinkAmount)
         }
                 .filter { it.second != 0 }
                 .map { it.first.name.plus(" drink ").plus(it.second) }
-                .let {gameInstructions.displayDrinkingInstructions(it)}
-    }
-
-    private fun getDrinkAmount(thro: Throw, player: Player): Int {
-        if (numberHit(thro, player)) {
-            return thro.lifeValue
-        } else {
-            return 0
-        }
+                .let { gameInstructions.displayDrinkingInstructions(it) }
     }
 
     private fun numberHit(thro: Throw, player: Player): Boolean {
