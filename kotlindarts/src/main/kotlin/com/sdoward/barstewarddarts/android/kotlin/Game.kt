@@ -51,16 +51,16 @@ class Game(val players: List<Player>, private val gameInstructions: GameInstruct
     }
 
     private fun displayDrinkingInstructions(turn: Turn) {
-        players.filter {
-            turn.toList().any {thro -> numberHit(thro, it) }
-        }.map {
-            val drinkAmount = turn.toList().fold(0) {
-                total, thro -> total.plus(getDrinkAmount(thro, it))
-            }
-            it.name.plus(" drink ").plus(drinkAmount)
-        }.let {
-            gameInstructions.displayDrinkingInstructions(it)
+        players.map { player ->
+            val drinkAmount = turn
+                    .toList()
+                    .filter { numberHit(it, player) }
+                    .fold(0) { total, thro -> total.plus(getDrinkAmount(thro, player)) }
+            Pair(player, drinkAmount)
         }
+                .filter { it.second != 0 }
+                .map { it.first.name.plus(" drink ").plus(it.second) }
+                .let {gameInstructions.displayDrinkingInstructions(it)}
     }
 
     private fun getDrinkAmount(thro: Throw, player: Player): Int {
