@@ -19,9 +19,7 @@ class Game(val players: List<Player>, private val gameInstructions: GameInstruct
     }
 
     private fun acceptTurn(turn: Turn) {
-        reconsileLives(turn.firstThrow)
-        reconsileLives(turn.secondThrow)
-        reconsileLives(turn.thirdThrow)
+        turn.toList().forEach { reconsileLives(it) }
         turns.add(turn)
         displayDrinkingInstructions(turn)
         displayCurrentPlayer()
@@ -53,17 +51,16 @@ class Game(val players: List<Player>, private val gameInstructions: GameInstruct
     }
 
     private fun displayDrinkingInstructions(turn: Turn) {
-        val instructions = players.filter {
-            numberHit(turn.firstThrow, it)
-                    .or(numberHit(turn.secondThrow, it))
-                    .or(numberHit(turn.thirdThrow, it))
+        players.filter {
+            turn.toList().any {thro -> numberHit(thro, it) }
         }.map {
-            val drinkAmount = getDrinkAmount(turn.firstThrow, it)
-                    .plus(getDrinkAmount(turn.secondThrow, it))
-                    .plus(getDrinkAmount(turn.thirdThrow, it))
+            val drinkAmount = turn.toList().fold(0) {
+                total, thro -> total.plus(getDrinkAmount(thro, it))
+            }
             it.name.plus(" drink ").plus(drinkAmount)
-        }.orEmpty()
-        gameInstructions.displayDrinkingInstructions(instructions)
+        }.let {
+            gameInstructions.displayDrinkingInstructions(it)
+        }
     }
 
     private fun getDrinkAmount(thro: Throw, player: Player): Int {
